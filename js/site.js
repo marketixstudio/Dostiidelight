@@ -146,28 +146,118 @@ function initReveals() {
   if (!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
 
-  gsap.utils.toArray('.reveal').forEach((el, i) => {
-    const isMobile = window.innerWidth <= 992;
-    gsap.to(el, {
-      opacity: 1, y: 0,
-      duration: isMobile ? 0.6 : 0.9,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: isMobile ? 'top 92%' : 'top 85%'
-      },
-      delay: isMobile ? 0 : (el.dataset.delay ? parseFloat(el.dataset.delay) : (i % 3) * 0.08)
-    });
+  const isMobile = window.innerWidth <= 992;
+  const vp = isMobile ? '92%' : '86%';
+  const st = (el, start) => ({ trigger: el, start: `top ${start || vp}`, once: true });
+  const handled = new Set();
+
+  // Eyebrows: slide from left
+  gsap.utils.toArray('.eyebrow.reveal').forEach(el => {
+    handled.add(el);
+    gsap.fromTo(el,
+      { x: -28, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.65, ease: 'power3.out', scrollTrigger: st(el) }
+    );
   });
 
-  // animated stat counters
+  // H2 / H3: rise up with subtle scale
+  gsap.utils.toArray('h2.reveal, h3.reveal').forEach(el => {
+    handled.add(el);
+    gsap.fromTo(el,
+      { y: 40, opacity: 0, scale: 0.96 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out', scrollTrigger: st(el) }
+    );
+  });
+
+  // Lead paragraphs: fade up after heading
+  gsap.utils.toArray('.lead.reveal').forEach(el => {
+    handled.add(el);
+    gsap.fromTo(el,
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.75, ease: 'power2.out', delay: 0.1, scrollTrigger: st(el) }
+    );
+  });
+
+  // Badges row: cascade pop-in
+  document.querySelectorAll('.badges').forEach(row => {
+    const badges = Array.from(row.querySelectorAll('.badge.reveal'));
+    badges.forEach(b => handled.add(b));
+    if (!badges.length) return;
+    gsap.fromTo(badges,
+      { scale: 0.72, opacity: 0, y: 10 },
+      { scale: 1, opacity: 1, y: 0, duration: 0.42, ease: 'back.out(1.8)', stagger: 0.06, scrollTrigger: st(row) }
+    );
+  });
+
+  // Grid cards: stagger slide-up per parent
+  document.querySelectorAll('.grid').forEach(grid => {
+    const cards = Array.from(grid.querySelectorAll('.card.reveal, .range-card.reveal'));
+    cards.forEach(c => handled.add(c));
+    if (!cards.length) return;
+    gsap.fromTo(cards,
+      { y: 52, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.72, ease: 'power3.out', stagger: 0.13, scrollTrigger: st(grid) }
+    );
+  });
+
+  // Stat items: scale pop in together
+  const statItems = Array.from(document.querySelectorAll('.stat.reveal'));
+  statItems.forEach(el => handled.add(el));
+  if (statItems.length) {
+    gsap.fromTo(statItems,
+      { scale: 0.82, opacity: 0, y: 16 },
+      { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.1,
+        scrollTrigger: st(statItems[0]) }
+    );
+  }
+
+  // FAQ items: alternating left/right slide
+  gsap.utils.toArray('.faq-item.reveal').forEach((el, i) => {
+    handled.add(el);
+    gsap.fromTo(el,
+      { x: i % 2 === 0 ? -22 : 22, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.58, ease: 'power2.out', delay: (i % 5) * 0.04,
+        scrollTrigger: st(el) }
+    );
+  });
+
+  // Buttons: spring scale-up
+  gsap.utils.toArray('.btn.reveal').forEach(el => {
+    handled.add(el);
+    gsap.fromTo(el,
+      { y: 18, opacity: 0, scale: 0.92 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.6)', scrollTrigger: st(el) }
+    );
+  });
+
+  // Ingredient cards: 3D tilt-in
+  gsap.utils.toArray('.ingredient-card.reveal').forEach((el, i) => {
+    handled.add(el);
+    gsap.fromTo(el,
+      { scale: 0.78, opacity: 0, rotationY: 12 },
+      { scale: 1, opacity: 1, rotationY: 0, duration: 0.65, ease: 'back.out(1.4)',
+        delay: i * 0.07, scrollTrigger: st(el) }
+    );
+  });
+
+  // Generic fallback for anything else
+  gsap.utils.toArray('.reveal').forEach((el, i) => {
+    if (handled.has(el)) return;
+    gsap.fromTo(el,
+      { y: 24, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+        delay: isMobile ? 0 : (i % 3) * 0.07, scrollTrigger: st(el) }
+    );
+  });
+
+  // Stat counters
   gsap.utils.toArray('.stat .num[data-count]').forEach(num => {
     const end = parseFloat(num.dataset.count);
     const suffix = num.dataset.suffix || '';
     const obj = { v: 0 };
     gsap.to(obj, {
-      v: end, duration: 1.6, ease: 'power2.out',
-      scrollTrigger: { trigger: num, start: 'top 90%' },
+      v: end, duration: 1.8, ease: 'power2.out',
+      scrollTrigger: { trigger: num, start: 'top 90%', once: true },
       onUpdate: () => { num.textContent = Math.round(obj.v) + suffix; }
     });
   });
@@ -227,31 +317,47 @@ function initContactForm() {
 function initHeroEntrance() {
   if (!window.gsap) return;
 
-  // 1. Homepage Hero Entrance
+  // 1. Homepage Hero
   const heroContent = document.querySelector('.hero-content');
   if (heroContent) {
-    const elements = [
-      heroContent.querySelector('.eyebrow'),
-      heroContent.querySelector('h1'),
-      heroContent.querySelector('.lead'),
-      heroContent.querySelector('.hero-actions')
-    ].filter(Boolean);
+    const eyebrow = heroContent.querySelector('.eyebrow');
+    const h1 = heroContent.querySelector('h1');
+    const lead = heroContent.querySelector('.lead');
+    const actions = heroContent.querySelector('.hero-actions');
+    const fallback = heroContent.querySelector('.hero-fallback-image');
 
-    // Remove reveal class from these to prevent GSAP conflicts
-    elements.forEach(el => el.classList.remove('reveal'));
+    [eyebrow, h1, lead, actions, fallback].filter(Boolean)
+      .forEach(el => el.classList.remove('reveal'));
 
-    gsap.set(elements, { opacity: 0, y: 24 });
-    gsap.to(elements, {
-      opacity: 1,
-      y: 0,
-      duration: 1.0,
-      stagger: 0.12,
-      ease: 'power3.out',
-      delay: 0.3
-    });
+    const tl = gsap.timeline({ delay: 0.25 });
+
+    if (eyebrow) tl.fromTo(eyebrow,
+      { x: -20, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.55, ease: 'power3.out' }
+    );
+    if (h1) tl.fromTo(h1,
+      { y: 44, opacity: 0, scale: 0.95 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out' },
+      '-=0.25'
+    );
+    if (lead) tl.fromTo(lead,
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.75, ease: 'power2.out' },
+      '-=0.5'
+    );
+    if (actions) tl.fromTo(actions,
+      { y: 18, opacity: 0, scale: 0.95 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.4)' },
+      '-=0.45'
+    );
+    if (fallback) tl.fromTo(fallback,
+      { y: 30, opacity: 0, scale: 0.9 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' },
+      '-=0.6'
+    );
   }
 
-  // 2. Inner Pages Hero Entrance
+  // 2. Inner page hero
   const pageHero = document.querySelector('.page-hero');
   if (pageHero) {
     const elements = [
@@ -260,17 +366,21 @@ function initHeroEntrance() {
       pageHero.querySelector('.lead')
     ].filter(Boolean);
 
-    // Remove reveal class from these to prevent GSAP conflicts
     elements.forEach(el => el.classList.remove('reveal'));
 
-    gsap.set(elements, { opacity: 0, y: 20 });
-    gsap.to(elements, {
-      opacity: 1,
-      y: 0,
-      duration: 1.0,
-      stagger: 0.1,
-      ease: 'power3.out',
-      delay: 0.15
+    const tl = gsap.timeline({ delay: 0.1 });
+    const fromVars = [
+      { x: -20, opacity: 0 },
+      { y: 36, opacity: 0, scale: 0.96 },
+      { y: 20, opacity: 0 }
+    ];
+    const toVars = [
+      { x: 0, opacity: 1, duration: 0.55, ease: 'power3.out' },
+      { y: 0, opacity: 1, scale: 1, duration: 0.85, ease: 'power3.out' },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' }
+    ];
+    elements.forEach((el, i) => {
+      tl.fromTo(el, fromVars[i] || { y: 20, opacity: 0 }, toVars[i] || { y: 0, opacity: 1, duration: 0.7 }, i === 0 ? '>' : '-=0.35');
     });
   }
 }

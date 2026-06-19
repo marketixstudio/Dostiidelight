@@ -417,7 +417,6 @@ function initHero(canvas) {
   let scrollTweens = [];
 
   function setupScrollTriggers() {
-    // Kill all previous scroll-driven tweens
     scrollTweens.forEach(t => { if (t.scrollTrigger) t.scrollTrigger.kill(); t.kill(); });
     scrollTweens = [];
 
@@ -430,31 +429,35 @@ function initHero(canvas) {
     Object.assign(activeConfig, s[0]);
 
     const keys = ['pctX', 'pctY', 'scale', 'rotX', 'rotY', 'rotZ', 'explode', 'scatter', 'autoSpin'];
-    const fromState = (idx) => Object.fromEntries(keys.map(k => [k, s[idx][k]]));
+    const stateVars = (idx) => Object.fromEntries(keys.map(k => [k, s[idx][k]]));
 
-    // One tween per section — fires when that section's top crosses the viewport,
-    // so 3D position is always in sync with what's actually on screen.
+    // fromTo is critical: each tween's FROM = previous section's final state so
+    // scrubbing backwards smoothly returns to the correct prior position instead
+    // of jumping to the hero state (what gsap.to() captures as implicit FROM).
     const plan = [
-      { sel: '#sec-product',        stateIdx: 1 },  // 3D LEFT  (replaces hidden product image)
-      { sel: '#sec-tradition',      stateIdx: 2 },  // 3D RIGHT (sits in right-column spacer)
-      { sel: '#sec-ingredients',    stateIdx: 3 },  // 3D LEFT  (left-column spacer)
-      { sel: '#sec-products-range', stateIdx: 4 },  // shrink offscreen
+      { sel: '#sec-product',        from: 0, to: 1 },
+      { sel: '#sec-tradition',      from: 1, to: 2 },
+      { sel: '#sec-ingredients',    from: 2, to: 3 },
+      { sel: '#sec-products-range', from: 3, to: 4 },
     ];
 
-    plan.forEach(({ sel, stateIdx }) => {
+    plan.forEach(({ sel, from, to }) => {
       const el = document.querySelector(sel);
       if (!el) return;
-      const tween = gsap.to(activeConfig, {
-        ...fromState(stateIdx),
-        overwrite: 'auto',
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 70%',
-          end: 'top 20%',
-          scrub: 0.5,
+      const tween = gsap.fromTo(activeConfig,
+        stateVars(from),
+        {
+          ...stateVars(to),
+          ease: 'none',
+          immediateRender: false,
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 70%',
+            end: 'top 20%',
+            scrub: 1.2,
+          }
         }
-      });
+      );
       scrollTweens.push(tween);
     });
   }
