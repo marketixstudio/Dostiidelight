@@ -275,6 +275,33 @@ function initHeroEntrance() {
   }
 }
 
+/* ---- 7. FAQ accordion ---- */
+function initFaqAccordion() {
+  const items = document.querySelectorAll('.faq-item');
+  if (!items.length) return;
+
+  items.forEach((item, i) => {
+    const btn = item.querySelector('.faq-question');
+    if (!btn) return;
+    if (i === 0) {
+      item.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+      items.forEach(it => {
+        it.classList.remove('is-open');
+        const b = it.querySelector('.faq-question');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+}
+
 if (window.gsap && window.ScrollTrigger) {
   document.documentElement.classList.add('motion-ready');
 }
@@ -286,4 +313,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initHeroEntrance();
   initReveals();
+  initFaqAccordion();
 });

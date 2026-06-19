@@ -180,7 +180,7 @@ function initHero(canvas) {
         
         // Use the front artwork on both surfaces; the back package is not shown.
         texLoader.load(
-          'assets/images/farsan-front-transparent.webp',
+          'assets/images/farsan-back-transparent.webp',
           (backTexture) => {
             backTexture.colorSpace = THREE.SRGBColorSpace;
             
