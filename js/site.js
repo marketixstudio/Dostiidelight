@@ -10,13 +10,20 @@ let lenis;
 function initLenis() {
   if (!window.Lenis) return;
   lenis = new Lenis({ duration: 1.1, smoothWheel: true });
-  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-  requestAnimationFrame(raf);
 
   if (window.ScrollTrigger) {
     lenis.on('scroll', ScrollTrigger.update);
+  }
+
+  if (window.gsap) {
     gsap.ticker.add((t) => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
+  } else {
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
   }
 }
 
@@ -44,50 +51,93 @@ function initMobileNav() {
   
   if (!toggle || !nav) return;
 
+  const navId = nav.id || 'primary-navigation';
+  const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  let previouslyFocused = null;
+
+  nav.id = navId;
+  toggle.setAttribute('aria-controls', navId);
+
+  const syncMenuAccessibility = (isOpen) => {
+    const isMobile = window.innerWidth <= 992;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    nav.inert = isMobile && !isOpen;
+    if (isMobile) {
+      nav.setAttribute('aria-hidden', String(!isOpen));
+    } else {
+      nav.removeAttribute('aria-hidden');
+    }
+  };
+
+  syncMenuAccessibility(false);
+
   const openMenu = (e) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
+    previouslyFocused = document.activeElement;
     nav.classList.add('open');
     if (overlay) overlay.classList.add('open');
+    syncMenuAccessibility(true);
     document.body.style.overflow = 'hidden';
+    if (closeBtn) closeBtn.focus();
   };
 
-  const closeMenu = (e) => {
+  const closeMenu = (e, restoreFocus = true) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     nav.classList.remove('open');
     if (overlay) overlay.classList.remove('open');
+    syncMenuAccessibility(false);
     document.body.style.overflow = '';
+    if (restoreFocus && previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
   };
 
   toggle.addEventListener('click', openMenu);
-  toggle.addEventListener('touchstart', openMenu, { passive: false });
 
   if (closeBtn) {
     closeBtn.addEventListener('click', closeMenu);
-    closeBtn.addEventListener('touchstart', closeMenu, { passive: false });
   }
 
   if (overlay) {
     overlay.addEventListener('click', closeMenu);
-    overlay.addEventListener('touchstart', closeMenu, { passive: false });
   }
 
   nav.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      nav.classList.remove('open');
-      if (overlay) overlay.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-    a.addEventListener('touchstart', () => {
-      nav.classList.remove('open');
-      if (overlay) overlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }, { passive: true });
+    a.addEventListener('click', () => closeMenu(null, false));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!nav.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      closeMenu(e);
+      return;
+    }
+    if (e.key !== 'Tab') return;
+
+    const focusable = Array.from(nav.querySelectorAll(focusableSelector));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 992 && nav.classList.contains('open')) {
+      closeMenu(null, false);
+    } else {
+      syncMenuAccessibility(nav.classList.contains('open'));
+    }
   });
 }
 
@@ -123,7 +173,57 @@ function initReveals() {
   });
 }
 
-/* ---- 5. Hero entrance animations ---- */
+/* ---- 5. Contact form ---- */
+function initContactForm() {
+  const form = document.querySelector('#enquiry-form');
+  if (!form || !window.fetch) return;
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  const status = form.querySelector('.form-status');
+  const defaultLabel = submitButton ? submitButton.textContent : '';
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+    }
+    if (status) {
+      status.textContent = 'Sending your enquiry...';
+      status.className = 'form-status';
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) throw new Error(result.message || 'Unable to send your enquiry.');
+
+      form.reset();
+      if (status) {
+        status.textContent = result.message || 'Thank you. Your enquiry has been sent.';
+        status.className = 'form-status is-success';
+      }
+    } catch (error) {
+      if (status) {
+        status.textContent = error.message || 'Unable to send right now. Please call or email us directly.';
+        status.className = 'form-status is-error';
+      }
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = defaultLabel;
+      }
+    }
+  });
+}
+
+/* ---- 6. Hero entrance animations ---- */
 function initHeroEntrance() {
   if (!window.gsap) return;
 
@@ -175,10 +275,15 @@ function initHeroEntrance() {
   }
 }
 
+if (window.gsap && window.ScrollTrigger) {
+  document.documentElement.classList.add('motion-ready');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initLenis();
   initHeader();
   initMobileNav();
+  initContactForm();
   initHeroEntrance();
   initReveals();
 });

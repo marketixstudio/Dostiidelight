@@ -33,9 +33,9 @@ WEBSITE/
 - **3D model:** drop `assets/models/product.glb`. Until then a stylized placeholder packet shows.
 
 ## Contact form
-Currently falls back to the visitor's email app. To make it send properly, either:
-- **Formspree (no code):** set the form `action="https://formspree.io/f/XXXX"`, or
-- **Hostinger PHP mailer:** ask and a `contact.php` will be added.
+The enquiry form posts to `contact.php`, which uses Hostinger's PHP mail service to
+deliver messages to `contact@dostiidelight.com`. The form includes inline success
+and error feedback plus a honeypot field for basic spam protection.
 
 ## Deploy to Hostinger
 1. In hPanel → **File Manager**, open `public_html`.

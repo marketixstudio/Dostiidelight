@@ -70,15 +70,12 @@
         <!-- Enquiry form -->
         <div class="reveal">
           <h2 style="margin-bottom:1.5rem;">Send an enquiry</h2>
-          <!--
-            FORM SETUP (pick one, no backend coding needed):
-            • Formspree:  action="https://formspree.io/f/XXXXXXX"  method="POST"
-            • Hostinger PHP: action="contact.php" method="POST" (I can add a contact.php mailer)
-            Until then it falls back to opening the visitor's email app.
-          -->
           <form class="card" id="enquiry-form"
-                action="mailto:contact@dostiidelight.com" method="POST" enctype="text/plain"
+                action="contact.php" method="POST"
                 style="display:grid;gap:1rem;">
+            <label class="form-honeypot" aria-hidden="true">Website
+              <input name="website" type="text" tabindex="-1" autocomplete="off" />
+            </label>
             <label>Name
               <input name="name" type="text" required placeholder="Your name"
                      style="width:100%;padding:.8rem 1rem;border:1px solid var(--cream-2);border-radius:12px;margin-top:.4rem;font:inherit;" />
@@ -92,6 +89,7 @@
                         style="width:100%;padding:.8rem 1rem;border:1px solid var(--cream-2);border-radius:12px;margin-top:.4rem;font:inherit;resize:vertical;"></textarea>
             </label>
             <button class="btn" type="submit">Send enquiry →</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
           </form>
         </div>
 

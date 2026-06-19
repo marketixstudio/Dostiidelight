@@ -12,7 +12,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const canvas = document.getElementById('hero-canvas');
-if (canvas) initHero(canvas);
+const desktopWebGL = window.matchMedia('(min-width: 993px)');
+if (canvas && desktopWebGL.matches) initHero(canvas);
 
 function initHero(canvas) {
   const heroEl = canvas.closest('.hero') || canvas.parentElement;

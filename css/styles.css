@@ -242,7 +242,8 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); margin-top: 2.5rem; padding-top: 1.5rem; font-size: .85rem; opacity: .75; display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
 
 /* ---------- scroll reveal ---------- */
-.reveal { opacity: 0; transform: translateY(16px); }
+/* Content stays visible when the animation CDNs are unavailable. */
+.motion-ready .reveal { opacity: 0; transform: translateY(16px); }
 
 /* ---------- responsive ---------- */
 @media (max-width: 992px) {
@@ -380,15 +381,9 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 }
 
 @media (max-width: 992px) {
-  /* Absolute canvas positioning inside .hero on mobile/tablet so it scrolls away naturally */
+  /* Use a lightweight static product image on mobile and tablet. */
   #hero-canvas {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 1;
-    display: block !important;
+    display: none !important;
   }
   
   /* Show inline fallback images in the sections since 3D model scrolls away with hero */
@@ -396,7 +391,9 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     display: block !important;
   }
   .hero-fallback-image {
-    display: none !important; /* Keep hero fallback hidden since 3D model is active in hero */
+    display: block;
+    position: relative;
+    z-index: 2;
   }
   
   /* Set spacer height to fit the inline fallback images */
@@ -423,6 +420,17 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
   display: block;
   pointer-events: none; /* Let the button handle the clicks */
 }
+
+/* ---------- enquiry form feedback ---------- */
+.form-status {
+  min-height: 1.5rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.form-status.is-success { color: var(--leaf); }
+.form-status.is-error { color: var(--chili); }
+#enquiry-form .btn:disabled { opacity: 0.65; cursor: wait; }
+.form-honeypot { position: absolute !important; left: -9999px !important; }
 
 /* ---------- stats contrast on red bg ---------- */
 .band-chili .stat .num {
