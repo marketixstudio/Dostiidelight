@@ -174,13 +174,13 @@ function initHero(canvas) {
     
     // Load Front Pouch Texture
     texLoader.load(
-      'assets/images/farsan-front-transparent.png',
+      'assets/images/farsan-front-transparent.webp',
       (frontTexture) => {
         frontTexture.colorSpace = THREE.SRGBColorSpace;
         
-        // Load Back Pouch Texture
+        // Use the front artwork on both surfaces; the back package is not shown.
         texLoader.load(
-          'assets/images/farsan-back-transparent.png',
+          'assets/images/farsan-front-transparent.webp',
           (backTexture) => {
             backTexture.colorSpace = THREE.SRGBColorSpace;
             
@@ -369,23 +369,23 @@ function initHero(canvas) {
 
   const states = {
     desktop: [
-      { pctX: 0.22, pctY: -0.02, scale: 0.85, rotX: 0.1, rotY: -0.4, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.08 },         // State 1: Hero
+      { pctX: 0.22, pctY: -0.02, scale: 0.85, rotX: 0.1, rotY: -0.4, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.0 },         // State 1: Hero
       { pctX: -0.22, pctY: 0.0, scale: 0.98, rotX: 0.15, rotY: 0.35, rotZ: -0.1, explode: 1.2, scatter: 1.0, autoSpin: 0.0 },      // State 2: Signature Product
-      { pctX: 0.22, pctY: 0.02, scale: 0.88, rotX: 0.08, rotY: Math.PI - 0.3, rotZ: 0.05, explode: 0.4, scatter: 0.6, autoSpin: 0.0 },     // State 3: Taste the Tradition
+      { pctX: 0.22, pctY: 0.02, scale: 0.88, rotX: 0.08, rotY: -0.3, rotZ: 0.05, explode: 0.4, scatter: 0.6, autoSpin: 0.0 },     // State 3: Taste the Tradition
       { pctX: -0.22, pctY: -0.05, scale: 0.82, rotX: 0.12, rotY: 0.4, rotZ: -0.05, explode: 1.8, scatter: 1.3, autoSpin: 0.05 },    // State 4: Ingredients
       { pctX: 0.0, pctY: -0.6, scale: 0.001, rotX: 0, rotY: 0, rotZ: 0, explode: 0.0, scatter: 0.0, autoSpin: 0.0 }               // State 5: Offscreen (Story/Stats)
     ],
     tablet: [
-      { pctX: 0.2, pctY: -0.02, scale: 0.72, rotX: 0.1, rotY: -0.4, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.08 },         // State 1: Hero
+      { pctX: 0.2, pctY: -0.02, scale: 0.72, rotX: 0.1, rotY: -0.4, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.0 },         // State 1: Hero
       { pctX: -0.2, pctY: 0.0, scale: 0.82, rotX: 0.15, rotY: 0.35, rotZ: -0.1, explode: 1.0, scatter: 0.8, autoSpin: 0.0 },      // State 2: Signature Product
-      { pctX: 0.2, pctY: 0.02, scale: 0.76, rotX: 0.08, rotY: Math.PI - 0.3, rotZ: 0.05, explode: 0.3, scatter: 0.5, autoSpin: 0.0 },     // State 3: Taste the Tradition
+      { pctX: 0.2, pctY: 0.02, scale: 0.76, rotX: 0.08, rotY: -0.3, rotZ: 0.05, explode: 0.3, scatter: 0.5, autoSpin: 0.0 },     // State 3: Taste the Tradition
       { pctX: -0.2, pctY: -0.05, scale: 0.72, rotX: 0.12, rotY: 0.4, rotZ: -0.05, explode: 1.5, scatter: 1.1, autoSpin: 0.05 },    // State 4: Ingredients
       { pctX: 0.0, pctY: -0.6, scale: 0.001, rotX: 0, rotY: 0, rotZ: 0, explode: 0.0, scatter: 0.0, autoSpin: 0.0 }               // State 5: Offscreen (Story/Stats)
     ],
     mobile: [
-      { pctX: 0.0, pctY: -0.25, scale: 0.65, rotX: 0.08, rotY: -0.35, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.06 },       // State 1: Hero
+      { pctX: 0.0, pctY: -0.25, scale: 0.65, rotX: 0.08, rotY: -0.35, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.0 },       // State 1: Hero
       { pctX: 0.0, pctY: 0.22, scale: 0.76, rotX: 0.12, rotY: 0.3, rotZ: -0.08, explode: 0.8, scatter: 0.7, autoSpin: 0.0 },       // State 2: Signature Product
-      { pctX: 0.0, pctY: -0.22, scale: 0.70, rotX: 0.08, rotY: Math.PI - 0.3, rotZ: 0.05, explode: 0.3, scatter: 0.4, autoSpin: 0.0 },      // State 3: Taste the Tradition
+      { pctX: 0.0, pctY: -0.22, scale: 0.70, rotX: 0.08, rotY: -0.3, rotZ: 0.05, explode: 0.3, scatter: 0.4, autoSpin: 0.0 },      // State 3: Taste the Tradition
       { pctX: 0.0, pctY: 0.22, scale: 0.65, rotX: 0.1, rotY: 0.35, rotZ: -0.05, explode: 1.2, scatter: 0.9, autoSpin: 0.04 },       // State 4: Ingredients
       { pctX: 0.0, pctY: -0.6, scale: 0.001, rotX: 0, rotY: 0, rotZ: 0, explode: 0.0, scatter: 0.0, autoSpin: 0.0 }               // State 5: Offscreen (Story/Stats)
     ]

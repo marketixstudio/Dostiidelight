@@ -407,6 +407,11 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     position: relative;
     z-index: 2;
   }
+
+  .spacer-3d.desktop-3d-spacer {
+    display: none;
+    min-height: 0;
+  }
   
   /* Set spacer height to fit the inline fallback images */
   .spacer-3d {
