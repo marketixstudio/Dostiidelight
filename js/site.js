@@ -35,10 +35,10 @@ function initHeader() {
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // mark active nav link by filename
-  const page = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav a').forEach(a => {
-    if (a.getAttribute('href') === page) a.classList.add('active');
+  // mark active nav link by pathname (clean URL)
+  const path = location.pathname.replace(/\/$/, '') || '/';
+  document.querySelectorAll('.nav a[href]').forEach(a => {
+    if (a.getAttribute('href') === path) a.classList.add('active');
   });
 }
 
