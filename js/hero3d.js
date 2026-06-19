@@ -12,19 +12,18 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const canvas = document.getElementById('hero-canvas');
-const desktopWebGL = window.matchMedia('(min-width: 993px)');
-if (canvas && desktopWebGL.matches) initHero(canvas);
+if (canvas) initHero(canvas);
 
 function initHero(canvas) {
   const heroEl = canvas.closest('.hero') || canvas.parentElement;
   const scene = new THREE.Scene();
 
-  const camera = new THREE.PerspectiveCamera(40, heroEl.clientWidth / heroEl.clientHeight, 0.1, 100);
+  const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
   camera.position.set(0, 0, 6);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setSize(heroEl.clientWidth, heroEl.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth <= 992 ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   // ---- lighting (warm, namkeen-friendly) ----
@@ -383,7 +382,7 @@ function initHero(canvas) {
       { pctX: 0.0, pctY: -0.6, scale: 0.001, rotX: 0, rotY: 0, rotZ: 0, explode: 0.0, scatter: 0.0, autoSpin: 0.0 }               // State 5: Offscreen (Story/Stats)
     ],
     mobile: [
-      { pctX: 0.0, pctY: -0.25, scale: 0.65, rotX: 0.08, rotY: -0.35, rotZ: 0, explode: 0.0, scatter: 0.2, autoSpin: 0.0 },       // State 1: Hero
+      { pctX: 0.0, pctY: 0.12, scale: 0.68, rotX: 0.08, rotY: -0.25, rotZ: 0, explode: 0.0, scatter: 0.15, autoSpin: 0.0 },       // State 1: Hero (centered-lower, below text)
       { pctX: 0.0, pctY: 0.22, scale: 0.76, rotX: 0.12, rotY: 0.3, rotZ: -0.08, explode: 0.8, scatter: 0.7, autoSpin: 0.0 },       // State 2: Signature Product
       { pctX: 0.0, pctY: -0.22, scale: 0.70, rotX: 0.08, rotY: -0.3, rotZ: 0.05, explode: 0.3, scatter: 0.4, autoSpin: 0.0 },      // State 3: Taste the Tradition
       { pctX: 0.0, pctY: 0.22, scale: 0.65, rotX: 0.1, rotY: 0.35, rotZ: -0.05, explode: 1.2, scatter: 0.9, autoSpin: 0.04 },       // State 4: Ingredients
@@ -422,6 +421,19 @@ function initHero(canvas) {
 
     if (window.innerWidth <= 992) {
       Object.assign(activeConfig, getActiveStates()[0]);
+      // Fade canvas out smoothly as the hero scrolls out of view — prevents
+      // the fixed canvas overlapping content sections below.
+      const fadeTween = gsap.to(canvas, {
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroEl,
+          start: 'bottom 75%',
+          end: 'bottom 15%',
+          scrub: 0.8,
+        }
+      });
+      scrollTweens.push(fadeTween);
       return;
     }
 
@@ -558,11 +570,13 @@ function initHero(canvas) {
 
   // ---- resize ----
   window.addEventListener('resize', () => {
-    camera.aspect = heroEl.clientWidth / heroEl.clientHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(heroEl.clientWidth, heroEl.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth <= 992 ? 1.5 : 2));
 
-    // Refresh ScrollTriggers
+    // Reset canvas opacity in case scroll state changed breakpoint
+    canvas.style.opacity = '';
     setupScrollTriggers();
   });
 }

@@ -198,6 +198,7 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
   background: #fff; border: 1px solid var(--cream-2); border-radius: 999px;
   padding: .5rem 1rem; font-size: .85rem; font-weight: 600; color: var(--ink-soft);
   box-shadow: 0 4px 14px rgba(110,18,18,.05);
+  display: inline-flex; align-items: center; gap: .4rem;
 }
 
 /* Override excessive padding for homepage sections to tighten layout */
@@ -437,15 +438,23 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 }
 
 @media (max-width: 992px) {
-  /* Use a lightweight static product image on mobile and tablet. */
-  #hero-canvas {
-    display: none !important;
+  /* Badges: 2 columns side-by-side, centered */
+  #sec-badges .badges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  #sec-badges .badge {
+    justify-content: center;
+    text-align: center;
   }
 
-  /* Show inline fallback images in the sections since 3D model scrolls away with hero */
-  .fallback-3d-img {
-    display: block !important;
+  /* 3D canvas active on mobile — fades out via JS as hero scrolls away */
+  #hero-canvas {
+    pointer-events: none;
   }
+
+  /* Hero fallback shows when WebGL fails; hidden via JS class when 3D is active */
   .hero-fallback-image {
     display: block;
     position: relative;
@@ -453,12 +462,17 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     width: min(300px, 72vw);
   }
 
+  /* Hide ingredients section spacer — user sees the same product image 3× otherwise */
+  #sec-ingredients .spacer-3d {
+    display: none;
+  }
+
   .spacer-3d.desktop-3d-spacer {
     display: none;
     min-height: 0;
   }
-  
-  /* Set spacer height to fit the inline fallback images */
+
+  /* Set spacer height to fit inline fallback images where still used */
   .spacer-3d {
     height: auto;
     min-height: 250px;
@@ -466,6 +480,11 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     align-items: center;
     justify-content: center;
   }
+}
+
+/* Hide hero fallback when 3D canvas is running (all screen sizes) */
+body.webgl-active .hero-fallback-image {
+  display: none !important;
 }
 
 @media (max-width: 600px) {
