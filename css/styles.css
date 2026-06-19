@@ -368,7 +368,7 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 }
 
 .spacer-3d {
-  height: 400px;
+  height: 300px;
 }
 
 /* Crop static backside product shadow in case of fallback */

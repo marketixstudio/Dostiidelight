@@ -414,107 +414,48 @@ function initHero(canvas) {
     autoSpin: getInitialState().autoSpin !== undefined ? getInitialState().autoSpin : 0.08
   };
 
-  let mainScrollTimeline = null;
+  let scrollTweens = [];
 
   function setupScrollTriggers() {
-    if (mainScrollTimeline) {
-      if (mainScrollTimeline.scrollTrigger) mainScrollTimeline.scrollTrigger.kill();
-      mainScrollTimeline.kill();
-      mainScrollTimeline = null;
-    }
+    // Kill all previous scroll-driven tweens
+    scrollTweens.forEach(t => { if (t.scrollTrigger) t.scrollTrigger.kill(); t.kill(); });
+    scrollTweens = [];
 
-    // Skip scroll animations on mobile/tablet viewports to ensure smooth page scrolling
     if (window.innerWidth <= 992) {
-      const activeStates = getActiveStates();
-      Object.assign(activeConfig, activeStates[0]);
+      Object.assign(activeConfig, getActiveStates()[0]);
       return;
     }
 
-    const activeStates = getActiveStates();
+    const s = getActiveStates();
+    Object.assign(activeConfig, s[0]);
 
-    // Reset initial config properties
-    Object.assign(activeConfig, activeStates[0]);
+    const keys = ['pctX', 'pctY', 'scale', 'rotX', 'rotY', 'rotZ', 'explode', 'scatter', 'autoSpin'];
+    const fromState = (idx) => Object.fromEntries(keys.map(k => [k, s[idx][k]]));
 
-    // Create a single unified timeline scrubbed over the active scroll range
-    // Start: top of hero (scroll = 0)
-    // End: bottom of ingredients section (when the product needs to disappear)
-    mainScrollTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".hero",
-        start: "top top",
-        endTrigger: "#sec-ingredients",
-        end: "bottom center",
-        scrub: 0.5
-      }
-    });
+    // One tween per section — fires when that section's top crosses the viewport,
+    // so 3D position is always in sync with what's actually on screen.
+    const plan = [
+      { sel: '#sec-product',        stateIdx: 1 },  // 3D LEFT  (replaces hidden product image)
+      { sel: '#sec-tradition',      stateIdx: 2 },  // 3D RIGHT (sits in right-column spacer)
+      { sel: '#sec-ingredients',    stateIdx: 3 },  // 3D LEFT  (left-column spacer)
+      { sel: '#sec-products-range', stateIdx: 4 },  // shrink offscreen
+    ];
 
-    // 1. Transition to Product Section (duration: 1.0)
-    mainScrollTimeline.to(activeConfig, {
-      pctX: activeStates[1].pctX,
-      pctY: activeStates[1].pctY,
-      scale: activeStates[1].scale,
-      rotX: activeStates[1].rotX,
-      rotY: activeStates[1].rotY,
-      rotZ: activeStates[1].rotZ,
-      explode: activeStates[1].explode,
-      scatter: activeStates[1].scatter,
-      autoSpin: activeStates[1].autoSpin,
-      duration: 1.0,
-      ease: "power1.inOut"
-    })
-    // Rest/Pause at Product Section (duration: 1.0)
-    .to(activeConfig, {
-      duration: 1.0
-    })
-    // 2. Transition to Tradition Section (duration: 1.0)
-    .to(activeConfig, {
-      pctX: activeStates[2].pctX,
-      pctY: activeStates[2].pctY,
-      scale: activeStates[2].scale,
-      rotX: activeStates[2].rotX,
-      rotY: activeStates[2].rotY,
-      rotZ: activeStates[2].rotZ,
-      explode: activeStates[2].explode,
-      scatter: activeStates[2].scatter,
-      autoSpin: activeStates[2].autoSpin,
-      duration: 1.0,
-      ease: "power1.inOut"
-    })
-    // Rest/Pause at Tradition Section (duration: 0.5)
-    .to(activeConfig, {
-      duration: 0.5
-    })
-    // 3. Transition to Ingredients Section (duration: 1.0)
-    .to(activeConfig, {
-      pctX: activeStates[3].pctX,
-      pctY: activeStates[3].pctY,
-      scale: activeStates[3].scale,
-      rotX: activeStates[3].rotX,
-      rotY: activeStates[3].rotY,
-      rotZ: activeStates[3].rotZ,
-      explode: activeStates[3].explode,
-      scatter: activeStates[3].scatter,
-      autoSpin: activeStates[3].autoSpin,
-      duration: 1.0,
-      ease: "power1.inOut"
-    })
-    // Rest/Pause at Ingredients Section (duration: 1.0)
-    .to(activeConfig, {
-      duration: 1.0
-    })
-    // 4. Transition to Offscreen / Story Section (duration: 1.0)
-    .to(activeConfig, {
-      pctX: activeStates[4].pctX,
-      pctY: activeStates[4].pctY,
-      scale: activeStates[4].scale,
-      rotX: activeStates[4].rotX,
-      rotY: activeStates[4].rotY,
-      rotZ: activeStates[4].rotZ,
-      explode: activeStates[4].explode,
-      scatter: activeStates[4].scatter,
-      autoSpin: activeStates[4].autoSpin,
-      duration: 1.0,
-      ease: "power1.inOut"
+    plan.forEach(({ sel, stateIdx }) => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      const tween = gsap.to(activeConfig, {
+        ...fromState(stateIdx),
+        overwrite: 'auto',
+        ease: 'power2.inOut',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 70%',
+          end: 'top 20%',
+          scrub: 0.5,
+        }
+      });
+      scrollTweens.push(tween);
     });
   }
 
