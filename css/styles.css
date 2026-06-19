@@ -479,34 +479,166 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
   margin-top: -3px;
 }
 
+/* ---------- utility: text align ---------- */
+.text-center { text-align: center; }
+
+/* ---------- utility: margins ---------- */
+.mt-sm  { margin-top: 1rem; }
+.mt-md  { margin-top: 1.5rem; }
+.mt-lg  { margin-top: 2rem; }
+.mt-xl  { margin-top: 2.5rem; }
+.mb-sm  { margin-bottom: 1rem; }
+.mb-md  { margin-bottom: 1.5rem; }
+.mb-lg  { margin-bottom: 2rem; }
+.mb-xl  { margin-bottom: 2.5rem; }
+
+/* ---------- section intro block ---------- */
+.section-intro { text-align: center; margin-bottom: 3.5rem; }
+.section-intro .lead { margin: 1rem auto 0; max-width: 600px; }
+
+/* ---------- alternate section band ---------- */
+.section--alt { background: rgba(251, 239, 217, 0.45); }
+
+/* ---------- product image ---------- */
+.product-img {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 450px;
+  display: block;
+  margin: 0 auto;
+}
+.product-img--card {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 260px;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 15px 25px rgba(110, 18, 18, 0.15));
+}
+
+/* ---------- small button ---------- */
+.btn.btn--sm { padding: 0.5rem 1.2rem; font-size: 0.9rem; }
+
+/* ---------- badges left-aligned ---------- */
+.badges--left { justify-content: flex-start; }
+
+/* ---------- eyebrow color variants ---------- */
+.eyebrow--saffron { color: var(--saffron); }
+.eyebrow--leaf    { color: var(--leaf); }
+
+/* ---------- range card (homepage product grid) ---------- */
+.range-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 2.5rem 2rem; }
+.range-card .eyebrow { font-size: 0.7rem; margin-bottom: 0.4rem; }
+.range-card__media { margin-bottom: 1.5rem; text-align: center; }
+.range-card__body  { flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.range-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(42, 26, 18, 0.06);
+}
+.range-card__name-hi { font-weight: 700; color: var(--chili); }
+
+/* ---------- story page subheadings ---------- */
+.story-h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  color: var(--chili);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+}
+
+/* ---------- content list (ingredients / product SEO) ---------- */
+.content-list {
+  margin-top: 1.2rem;
+  display: grid;
+  gap: 0.8rem;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+/* ---------- active nav: mobile indicator ---------- */
+@media (max-width: 992px) {
+  .nav a.active {
+    color: var(--chili);
+    border-left: 3px solid var(--chili);
+    padding-left: 0.75rem;
+  }
+}
+
 /* ---------- FAQ section ---------- */
 .faq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  gap: 1.5rem;
   margin-top: 3.5rem;
 }
 @media (max-width: 768px) {
   .faq-grid {
     grid-template-columns: 1fr;
-    gap: 1.8rem;
+    gap: 1rem;
   }
 }
 .faq-item {
   background: #fff;
   border-radius: var(--radius);
-  padding: 2.2rem;
+  padding: 1.8rem 2rem;
   box-shadow: var(--shadow);
   border: 1px solid var(--cream-2);
 }
-.faq-item h3 {
+
+/* Override default h3 margin inside accordion */
+.faq-item h3 { margin-bottom: 0; font-size: inherit; line-height: inherit; color: inherit; }
+
+/* Accordion trigger button */
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  gap: 1rem;
   color: var(--chili);
-  margin-bottom: 0.8rem;
-  font-size: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
   line-height: 1.3;
 }
-.faq-item p {
+.faq-question:focus-visible {
+  outline: 2px solid var(--saffron);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.faq-chevron {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--saffron);
+  transition: transform 0.35s var(--ease);
+}
+.faq-item.is-open .faq-chevron { transform: rotate(180deg); }
+
+/* Accordion body — uses CSS grid trick for smooth height animation */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s var(--ease);
+}
+.faq-answer__inner { overflow: hidden; }
+.faq-item.is-open .faq-answer { grid-template-rows: 1fr; }
+.faq-answer p {
+  padding-top: 0.8rem;
   color: var(--ink-soft);
   font-size: 0.98rem;
-  line-height: 1.6;
+  line-height: 1.7;
 }
