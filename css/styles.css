@@ -188,7 +188,8 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
     padding-block: 0;
     height: auto;
-    min-height: 100svh;
+    min-height: auto;
+    padding-bottom: 3rem;
   }
   .hero-content {
     max-width: 100%;
@@ -483,15 +484,10 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* Hide 3D canvas on mobile, show product image instead */
+  /* Hide 3D canvas and fallback image on mobile — hero is text/CTA only */
   #hero-canvas { display: none; }
   .hero-fallback-image,
-  body.webgl-active .hero-fallback-image {
-    display: block !important;
-    position: relative;
-    z-index: 2;
-    width: min(300px, 72vw);
-  }
+  body.webgl-active .hero-fallback-image { display: none !important; }
 
   /* Hide ingredients section spacer — user sees the same product image 3× otherwise */
   #sec-ingredients .spacer-3d {
