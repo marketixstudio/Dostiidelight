@@ -189,16 +189,15 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     padding-block: 0;
     height: auto;
     min-height: auto;
-    padding-bottom: 3rem;
   }
   .hero-content {
     max-width: 100%;
     padding-top: 5.5rem;
-    padding-bottom: 1rem;
+    padding-bottom: 0;
     margin-bottom: 0;
   }
   .hero .lead { margin: 1.4rem auto 2.2rem; }
-  .hero-actions { justify-content: center; }
+  .hero-actions { justify-content: center; padding-bottom: 2.5rem; }
 }
 .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); opacity: .8; }
 .scroll-hint::after { content: ""; display: block; width: 1px; height: 36px; margin: .6rem auto 0; background: var(--chili); animation: scrollpulse 1.8s var(--ease) infinite; transform-origin: top; }
