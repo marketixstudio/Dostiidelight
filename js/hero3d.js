@@ -450,7 +450,7 @@ function initHero(canvas) {
       { sel: '#sec-product',        from: 0, to: 1 },
       { sel: '#sec-tradition',      from: 1, to: 2 },
       { sel: '#sec-ingredients',    from: 2, to: 3 },
-      { sel: '#sec-products-range', from: 3, to: 4 },
+      { sel: '#sec-video',          from: 3, to: 4 }, // offscreen — model gone before products range
     ];
 
     plan.forEach(({ sel, from, to }) => {
