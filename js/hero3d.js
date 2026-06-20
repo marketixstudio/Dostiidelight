@@ -22,9 +22,19 @@ function initHero(canvas) {
   camera.position.set(0, 0, 6);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth <= 992 ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  function syncSize() {
+    const isMob = window.innerWidth <= 992;
+    // On mobile size the canvas to the hero's actual height so the model
+    // is physically contained within the hero section (position:absolute).
+    const h = isMob ? (heroEl.offsetHeight || window.innerHeight) : window.innerHeight;
+    renderer.setSize(window.innerWidth, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMob ? 1.5 : 2));
+    camera.aspect = window.innerWidth / h;
+    camera.updateProjectionMatrix();
+  }
+  syncSize();
 
   // ---- lighting (warm, namkeen-friendly) ----
   scene.add(new THREE.AmbientLight(0xffffff, 0.8));
@@ -424,16 +434,9 @@ function initHero(canvas) {
 
     if (window.innerWidth <= 992) {
       Object.assign(activeConfig, getActiveStates()[0]);
-      // Canvas is position:fixed. Sections below hero have z-index:3 so they
-      // cover the model as they scroll up. Observer hides canvas once hero
-      // fully exits the viewport (no fade — instant toggle).
+      // Canvas is position:absolute, sized to hero height via syncSize().
+      // It scrolls with the hero so the model is always within the hero box.
       canvas.style.opacity = '1';
-      if ('IntersectionObserver' in window) {
-        mobileHeroObserver = new IntersectionObserver(([entry]) => {
-          canvas.style.opacity = entry.isIntersecting ? '1' : '0';
-        }, { threshold: 0 });
-        mobileHeroObserver.observe(heroEl);
-      }
       return;
     }
 
@@ -570,12 +573,7 @@ function initHero(canvas) {
 
   // ---- resize ----
   window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth <= 992 ? 1.5 : 2));
-
-    // Reset canvas opacity in case scroll state changed breakpoint
+    syncSize();
     canvas.style.opacity = '';
     setupScrollTriggers();
   });
