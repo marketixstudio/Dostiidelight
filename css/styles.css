@@ -259,6 +259,8 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 .page-hero { padding: clamp(6.0rem, 11vw, 8.5rem) 0 3rem; text-align: center; }
 
 /* ---------- video showcase ---------- */
+/* z-index: 3 lifts the section above the fixed 3D canvas (z-index: 2) */
+#sec-video { z-index: 3; }
 .video-showcase__wrap {
   display: grid;
   grid-template-columns: 1fr 1fr;
