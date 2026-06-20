@@ -474,8 +474,15 @@ function initDistributorForm() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.message || 'Unable to send.');
-      form.reset();
-      if (status) { status.textContent = '✓ Received! We\'ll be in touch within 24 hours.'; status.className = 'dist-status is-success'; }
+      form.innerHTML = `<div class="dist-success-state">
+        <svg class="dist-check-circle" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+          <circle class="dist-check-bg" cx="36" cy="36" r="36"/>
+          <circle class="dist-check-ring" cx="36" cy="36" r="30" transform="rotate(-90 36 36)"/>
+          <polyline class="dist-check-tick" points="20,37 30,47 52,25"/>
+        </svg>
+        <p class="dist-success-title">Enquiry Received!</p>
+        <p class="dist-success-body">We’ll be in touch within 24 hours.</p>
+      </div>`;
     } catch (err) {
       if (status) { status.textContent = err.message || 'Something went wrong. Please call us directly.'; status.className = 'dist-status is-error'; }
     } finally {

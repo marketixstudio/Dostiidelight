@@ -872,8 +872,43 @@ body.webgl-active .hero-fallback-image {
 .dist-form textarea { resize: vertical; min-height: 80px; }
 .dist-form .btn { width: 100%; justify-content: center; }
 .dist-status { text-align: center; font-size: 0.9rem; min-height: 1.2em; color: var(--ink-soft); }
-.dist-status.is-success { color: #2e7d32; font-weight: 600; }
-.dist-status.is-error   { color: var(--chili); }
+.dist-status.is-error { color: var(--chili); }
+
+/* ---- Form success animation ---- */
+.dist-success-state {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 1.5rem 0.5rem; gap: 1rem;
+}
+.dist-check-circle { width: 76px; height: 76px; }
+.dist-check-bg { fill: #f0fdf4; }
+.dist-check-ring {
+  fill: none; stroke: #22c55e; stroke-width: 3.5;
+  stroke-dasharray: 189; stroke-dashoffset: 189;
+  stroke-linecap: round;
+  animation: dist-ring 0.65s 0.1s cubic-bezier(.4,0,.2,1) forwards;
+}
+.dist-check-tick {
+  fill: none; stroke: #22c55e; stroke-width: 4;
+  stroke-dasharray: 50; stroke-dashoffset: 50;
+  stroke-linecap: round; stroke-linejoin: round;
+  animation: dist-tick 0.35s 0.72s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes dist-ring { to { stroke-dashoffset: 0; } }
+@keyframes dist-tick { to { stroke-dashoffset: 0; } }
+.dist-success-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.25rem; color: var(--ink);
+  opacity: 0; animation: dist-text-in 0.4s 0.95s ease forwards;
+}
+.dist-success-body {
+  color: rgba(42,26,18,.6); font-size: .95rem;
+  opacity: 0; animation: dist-text-in 0.4s 1.1s ease forwards;
+}
+@keyframes dist-text-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 @media (max-width: 992px) {
   .dist-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
