@@ -43,7 +43,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---------- layout helpers ---------- */
 .container { width: min(100% - 3.5rem, var(--maxw)); margin-inline: auto; }
-.section { padding: clamp(4rem, 9vw, 8rem) 0; position: relative; z-index: 3; }
+.section { padding: clamp(4rem, 9vw, 8rem) 0; position: relative; z-index: 1; }
 .section > .container { position: relative; z-index: 3; }
 .eyebrow {
   display: inline-block; font-family: var(--font-body); font-weight: 700;
@@ -806,7 +806,7 @@ body.webgl-active .hero-fallback-image {
 /* =========================================================
    Distributor / Wholesale Section
    ========================================================= */
-#sec-distributor { background: var(--ink); color: #f4e9df; }
+#sec-distributor { background: var(--ink); color: #f4e9df; z-index: 3; }
 
 .dist-wrap {
   display: grid;
