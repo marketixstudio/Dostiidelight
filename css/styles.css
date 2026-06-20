@@ -171,6 +171,16 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 .hero .lead { margin: 1.4rem 0 2.2rem; }
 .hero-actions { display: flex; gap: 1rem; justify-content: flex-start; flex-wrap: wrap; }
 
+/* Mobile video replaces 3D canvas — hidden on desktop */
+.hero-video-mobile { display: none; }
+.hero-video-mobile video {
+  max-width: min(280px, 78vw);
+  max-height: 44vh;
+  object-fit: contain;
+  border-radius: 16px;
+  filter: drop-shadow(0 24px 48px rgba(110,18,18,0.22));
+}
+
 @media (max-width: 992px) {
   .hero {
     flex-direction: column;
@@ -188,6 +198,18 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
   }
   .hero .lead { margin: 1.4rem auto 2.2rem; }
   .hero-actions { justify-content: center; }
+
+  /* Video takes over from 3D on mobile */
+  .hero-video-mobile {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0.5rem 2rem 3rem;
+    flex: 1;
+  }
+  #hero-canvas { display: none !important; }
+  .hero-fallback-image { display: none !important; }
 }
 .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); opacity: .8; }
 .scroll-hint::after { content: ""; display: block; width: 1px; height: 36px; margin: .6rem auto 0; background: var(--chili); animation: scrollpulse 1.8s var(--ease) infinite; transform-origin: top; }
@@ -235,6 +257,27 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 
 /* ---------- page hero (inner pages) ---------- */
 .page-hero { padding: clamp(6.0rem, 11vw, 8.5rem) 0 3rem; text-align: center; }
+
+/* ---------- video showcase ---------- */
+.video-showcase__wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.video-showcase__player {
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  display: block;
+}
+.video-showcase__text .lead { color: rgba(255,255,255,0.8); max-width: 42ch; }
+@media (max-width: 992px) {
+  .video-showcase__wrap { grid-template-columns: 1fr; gap: 2rem; }
+  .video-showcase__text { order: -1; text-align: center; }
+  .video-showcase__text .lead { margin-inline: auto; }
+  .video-showcase__player { max-height: 56vw; object-fit: cover; }
+}
 
 /* ---------- footer ---------- */
 .site-footer { background: var(--ink); color: #f4e9df; padding: 4rem 0 2rem; }
@@ -450,20 +493,7 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* 3D canvas: absolute within hero so it scrolls away with the section */
-  #hero-canvas {
-    position: absolute;
-    pointer-events: none;
-    clip-path: inset(50% 0 0 0);
-  }
-
-  /* Hero fallback shows when WebGL fails; hidden via JS class when 3D is active */
-  .hero-fallback-image {
-    display: block;
-    position: relative;
-    z-index: 2;
-    width: min(300px, 72vw);
-  }
+  /* 3D canvas and fallback image hidden on mobile — video-mobile takes over */
 
   /* Hide ingredients section spacer — user sees the same product image 3× otherwise */
   #sec-ingredients .spacer-3d {

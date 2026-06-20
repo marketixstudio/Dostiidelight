@@ -190,6 +190,12 @@
       <img src="assets/images/farsan-special-cutout.webp" alt="Dostii Delight Namkeen"
            width="900" height="900" fetchpriority="high" decoding="async" />
     </div>
+    <!-- Mobile-only: video replaces 3D canvas for stability -->
+    <div class="hero-video-mobile" aria-hidden="true">
+      <video autoplay muted loop playsinline>
+        <source src="assets/images/packaging.mp4" type="video/mp4">
+      </video>
+    </div>
   </section>
 
   <!-- ============ BADGES ============ -->
@@ -261,6 +267,23 @@
           <div class="card"><div class="icon" style="margin-bottom:0.8rem;"><svg class="icon-svg" style="width:32px; height:32px; color:#d50000;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 1.5 1.5 2.5 2 4.5.583 2.333-.25 4.5-2.5 6a5.5 5.5 0 0 1-3 1z"/></svg></div><h3>Signature Masala</h3><p>A secret blend of aromatic Indian spices.</p></div>
         </div>
         <a class="btn btn--ghost mt-lg" href="/ingredients" style="display:inline-flex;">Explore ingredients →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO SHOWCASE ============ -->
+  <section class="section band-chili" id="sec-video">
+    <div class="container">
+      <div class="video-showcase__wrap">
+        <video class="video-showcase__player reveal" autoplay muted loop playsinline>
+          <source src="assets/images/packaging.mp4" type="video/mp4">
+        </video>
+        <div class="video-showcase__text reveal">
+          <span class="eyebrow">Crafted with Care</span>
+          <h2>Sealed Fresh,<br>Every Single Batch</h2>
+          <p class="lead">From raw ingredients to the perfect crunch — every pack of Dostii Delight is prepared and sealed on our own floor so freshness reaches you every time.</p>
+          <a class="btn mt-lg" href="/our-story" style="background:#fff; color:var(--chili);">Our Story →</a>
+        </div>
       </div>
     </div>
   </section>
