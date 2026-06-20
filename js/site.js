@@ -440,11 +440,56 @@ if (window.gsap && window.ScrollTrigger) {
   document.documentElement.classList.add('motion-ready');
 }
 
+/* ---- 9. Distributor enquiry form ---- */
+function initDistributorForm() {
+  const form = document.querySelector('#distributor-form');
+  if (!form) return;
+
+  const btn = form.querySelector('button[type="submit"]');
+  const status = form.querySelector('.dist-status');
+  const defaultLabel = btn ? btn.textContent : '';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    // Build combined message from extra fields
+    const biz   = (form.querySelector('[name="business"]')?.value || '').trim();
+    const city  = (form.querySelector('[name="city"]')?.value || '').trim();
+    const state = (form.querySelector('[name="state"]')?.value || '').trim();
+    const extra = (form.querySelector('[name="extra"]')?.value || '').trim();
+    const parts = [];
+    if (biz)   parts.push('Business: ' + biz);
+    if (city || state) parts.push('Location: ' + [city, state].filter(Boolean).join(', '));
+    if (extra) parts.push(extra);
+    const msgInput = form.querySelector('[name="extra"]');
+    if (msgInput) msgInput.value = '[DISTRIBUTOR ENQUIRY]\n' + parts.join('\n');
+
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    if (status) { status.textContent = ''; status.className = 'dist-status'; }
+
+    try {
+      const res = await fetch('contact.php', {
+        method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.message || 'Unable to send.');
+      form.reset();
+      if (status) { status.textContent = '✓ Received! We'll be in touch within 24 hours.'; status.className = 'dist-status is-success'; }
+    } catch (err) {
+      if (status) { status.textContent = err.message || 'Something went wrong. Please call us directly.'; status.className = 'dist-status is-error'; }
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = defaultLabel; }
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initLenis();
   initHeader();
   initMobileNav();
   initContactForm();
+  initDistributorForm();
   initHeroEntrance();
   initReveals();
   initLazyVideos();

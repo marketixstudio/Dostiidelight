@@ -740,3 +740,143 @@ body.webgl-active .hero-fallback-image {
   font-size: 0.98rem;
   line-height: 1.7;
 }
+
+/* =========================================================
+   WhatsApp Float + Mobile Sticky Bar
+   ========================================================= */
+.wa-float {
+  position: fixed;
+  bottom: 2rem;
+  right: 1.5rem;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+  z-index: 998;
+  transition: transform 0.2s ease;
+  animation: wa-pulse 2.5s ease-in-out infinite;
+  text-decoration: none;
+}
+.wa-float:hover { transform: scale(1.1); }
+@keyframes wa-pulse {
+  0%,100% { box-shadow: 0 6px 24px rgba(37,211,102,0.4); }
+  50%      { box-shadow: 0 6px 40px rgba(37,211,102,0.78); }
+}
+
+.mobile-sticky-bar { display: none; }
+
+@media (max-width: 992px) {
+  .wa-float { display: none; }
+  .mobile-sticky-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body { padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)); }
+}
+
+.mobile-sticky-bar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.9rem 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #fff;
+  text-decoration: none;
+  transition: filter 0.15s;
+}
+.mobile-sticky-bar__btn:hover,
+.mobile-sticky-bar__btn:active { filter: brightness(1.12); }
+.mobile-sticky-bar__btn--wa   { background: #25D366; }
+.mobile-sticky-bar__btn--call { background: var(--chili); }
+
+/* =========================================================
+   Distributor / Wholesale Section
+   ========================================================= */
+#sec-distributor { background: var(--ink); color: #f4e9df; }
+
+.dist-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+.dist-intro .lead { color: rgba(244,233,223,0.8); max-width: 44ch; margin-top: 1rem; }
+.dist-perks {
+  list-style: none;
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.6rem;
+}
+.dist-perks li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.97rem;
+  color: rgba(244,233,223,0.85);
+}
+.dist-perks li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--saffron) url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/11px no-repeat;
+}
+.dist-form {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  display: grid;
+  gap: 1rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.dist-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.dist-form label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.dist-form input,
+.dist-form textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid rgba(42,26,18,0.15);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: #fff;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.dist-form input:focus,
+.dist-form textarea:focus { outline: none; border-color: var(--chili); }
+.dist-form textarea { resize: vertical; min-height: 80px; }
+.dist-form .btn { width: 100%; justify-content: center; }
+.dist-status { text-align: center; font-size: 0.9rem; min-height: 1.2em; color: var(--ink-soft); }
+.dist-status.is-success { color: #2e7d32; font-weight: 600; }
+.dist-status.is-error   { color: var(--chili); }
+
+@media (max-width: 992px) {
+  .dist-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+  .dist-form .form-row { grid-template-columns: 1fr; }
+  .dist-intro .lead { max-width: 100%; }
+}
