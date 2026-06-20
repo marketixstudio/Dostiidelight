@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://www.dostiidelight.com/</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/farsan-special.webp</image:loc>
+      <image:title>Dostii Delight Farsan Special — India's Favourite Namkeen</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.dostiidelight.com/product</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/farsan-special.webp</image:loc>
+      <image:title>Dostii Delight Farsan Special Namkeen</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/wafers.webp</image:loc>
+      <image:title>Dostii Delight Potato Wafers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/keli-wafers.webp</image:loc>
+      <image:title>Dostii Delight Keli Wafers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/shev-chiwda.webp</image:loc>
+      <image:title>Dostii Delight Sev Chivda</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/shabu-chiwda.webp</image:loc>
+      <image:title>Dostii Delight Sabudana Chivda</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.dostiidelight.com/assets/images/batata-chiwda.webp</image:loc>
+      <image:title>Dostii Delight Potato Chivda</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.dostiidelight.com/ingredients</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.dostiidelight.com/our-story</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.dostiidelight.com/contact</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
