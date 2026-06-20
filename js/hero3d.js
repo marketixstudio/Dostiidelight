@@ -382,7 +382,7 @@ function initHero(canvas) {
       { pctX: 0.0, pctY: -0.6, scale: 0.001, rotX: 0, rotY: 0, rotZ: 0, explode: 0.0, scatter: 0.0, autoSpin: 0.0 }               // State 5: Offscreen (Story/Stats)
     ],
     mobile: [
-      { pctX: 0.0, pctY: -0.30, scale: 0.60, rotX: 0.08, rotY: -0.25, rotZ: 0, explode: 0.0, scatter: 0.08, autoSpin: 0.0 },       // State 1: Hero (lower half, clear of CTA buttons)
+      { pctX: 0.0, pctY: -0.31, scale: 0.50, rotX: 0.08, rotY: -0.25, rotZ: 0, explode: 0.0, scatter: 0.08, autoSpin: 0.0 },       // State 1: Hero — top at ~63vh, bottom at ~96vh, clears CTAs
       { pctX: 0.0, pctY: 0.22, scale: 0.76, rotX: 0.12, rotY: 0.3, rotZ: -0.08, explode: 0.8, scatter: 0.7, autoSpin: 0.0 },       // State 2: Signature Product
       { pctX: 0.0, pctY: -0.22, scale: 0.70, rotX: 0.08, rotY: -0.3, rotZ: 0.05, explode: 0.3, scatter: 0.4, autoSpin: 0.0 },      // State 3: Taste the Tradition
       { pctX: 0.0, pctY: 0.22, scale: 0.65, rotX: 0.1, rotY: 0.35, rotZ: -0.05, explode: 1.2, scatter: 0.9, autoSpin: 0.04 },       // State 4: Ingredients
