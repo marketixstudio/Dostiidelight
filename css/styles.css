@@ -450,10 +450,11 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* 3D canvas: only show in lower portion of hero — keeps text area clean */
+  /* 3D canvas: absolute within hero so it scrolls away with the section */
   #hero-canvas {
+    position: absolute;
     pointer-events: none;
-    clip-path: inset(47% 0 0 0);
+    clip-path: inset(43% 0 0 0);
   }
 
   /* Hero fallback shows when WebGL fails; hidden via JS class when 3D is active */
