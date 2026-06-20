@@ -424,16 +424,9 @@ function initHero(canvas) {
 
     if (window.innerWidth <= 992) {
       Object.assign(activeConfig, getActiveStates()[0]);
-      // Canvas is position:fixed so the model stays at the same spot while
-      // the user scrolls through the hero. Hide instantly (no fade) the
-      // moment the hero section leaves the viewport.
+      // Canvas is position:absolute inside hero (CSS). overflow:hidden on
+      // .hero clips it to the hero box — no JS observer needed.
       canvas.style.opacity = '1';
-      if ('IntersectionObserver' in window) {
-        mobileHeroObserver = new IntersectionObserver(([entry]) => {
-          canvas.style.opacity = entry.isIntersecting ? '1' : '0';
-        }, { threshold: 0 });
-        mobileHeroObserver.observe(heroEl);
-      }
       return;
     }
 

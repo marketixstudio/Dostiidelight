@@ -483,10 +483,11 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* 3D canvas: stays fixed (position inherited from base rule) so the model
-     stays visible while user scrolls through the hero. clip-path hides the
-     top half so floating ingredients never overlap the text/buttons. */
+  /* 3D canvas: absolute so it is physically contained within the hero box.
+     overflow:hidden on .hero clips anything that renders outside its bounds. */
+  .hero { overflow: hidden; }
   #hero-canvas {
+    position: absolute;
     clip-path: inset(50% 0 0 0);
   }
 
