@@ -475,7 +475,7 @@ function initDistributorForm() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.message || 'Unable to send.');
       form.reset();
-      if (status) { status.textContent = '✓ Received! We'll be in touch within 24 hours.'; status.className = 'dist-status is-success'; }
+      if (status) { status.textContent = '✓ Received! We\'ll be in touch within 24 hours.'; status.className = 'dist-status is-success'; }
     } catch (err) {
       if (status) { status.textContent = err.message || 'Something went wrong. Please call us directly.'; status.className = 'dist-status is-error'; }
     } finally {
