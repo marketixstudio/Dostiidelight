@@ -385,7 +385,31 @@ function initHeroEntrance() {
   }
 }
 
-/* ---- 7. FAQ accordion ---- */
+/* ---- 7. Lazy video loader ---- */
+function initLazyVideos() {
+  const videos = document.querySelectorAll('video[data-lazy-video]');
+  if (!videos.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    // Fallback: just load and play everything
+    videos.forEach(v => { v.load(); v.play().catch(() => {}); });
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const video = entry.target;
+      video.load();
+      video.play().catch(() => {});
+      observer.unobserve(video);
+    });
+  }, { rootMargin: '150px' });
+
+  videos.forEach(v => observer.observe(v));
+}
+
+/* ---- 8. FAQ accordion ---- */
 function initFaqAccordion() {
   const items = document.querySelectorAll('.faq-item');
   if (!items.length) return;
@@ -423,5 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initHeroEntrance();
   initReveals();
+  initLazyVideos();
   initFaqAccordion();
 });
