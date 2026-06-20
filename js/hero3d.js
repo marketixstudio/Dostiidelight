@@ -12,7 +12,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const canvas = document.getElementById('hero-canvas');
-if (canvas && window.innerWidth > 992) initHero(canvas);
+if (canvas) initHero(canvas);
 
 function initHero(canvas) {
   const heroEl = canvas.closest('.hero') || canvas.parentElement;
