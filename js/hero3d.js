@@ -414,27 +414,25 @@ function initHero(canvas) {
   };
 
   let scrollTweens = [];
+  let mobileHeroObserver = null;
 
   function setupScrollTriggers() {
+    // Disconnect previous mobile observer on resize/re-init
+    if (mobileHeroObserver) { mobileHeroObserver.disconnect(); mobileHeroObserver = null; }
     scrollTweens.forEach(t => { if (t.scrollTrigger) t.scrollTrigger.kill(); t.kill(); });
     scrollTweens = [];
 
     if (window.innerWidth <= 992) {
       Object.assign(activeConfig, getActiveStates()[0]);
-      // Canvas is position:fixed on mobile so the model stays visible as the
-      // user scrolls through the hero. Fade it out when the hero exits.
-      if (window.gsap && window.ScrollTrigger) {
-        const fadeTween = gsap.to(canvas, {
-          opacity: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroEl,
-            start: 'bottom 80%',
-            end: 'bottom top',
-            scrub: true
-          }
-        });
-        scrollTweens.push(fadeTween);
+      // Canvas is position:fixed so the model stays at the same spot while
+      // the user scrolls through the hero. Hide instantly (no fade) the
+      // moment the hero section leaves the viewport.
+      canvas.style.opacity = '1';
+      if ('IntersectionObserver' in window) {
+        mobileHeroObserver = new IntersectionObserver(([entry]) => {
+          canvas.style.opacity = entry.isIntersecting ? '1' : '0';
+        }, { threshold: 0 });
+        mobileHeroObserver.observe(heroEl);
       }
       return;
     }
