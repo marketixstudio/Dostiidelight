@@ -421,8 +421,21 @@ function initHero(canvas) {
 
     if (window.innerWidth <= 992) {
       Object.assign(activeConfig, getActiveStates()[0]);
-      // Canvas is position:absolute on mobile — it scrolls away with the
-      // hero section naturally, so no fade trigger is needed.
+      // Canvas is position:fixed on mobile so the model stays visible as the
+      // user scrolls through the hero. Fade it out when the hero exits.
+      if (window.gsap && window.ScrollTrigger) {
+        const fadeTween = gsap.to(canvas, {
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroEl,
+            start: 'bottom 80%',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+        scrollTweens.push(fadeTween);
+      }
       return;
     }
 
