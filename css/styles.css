@@ -483,12 +483,11 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* Hide 3D canvas entirely on mobile */
+  /* Hide 3D canvas on mobile, show product image instead */
   #hero-canvas { display: none; }
-
-  /* Hero fallback shows when WebGL fails; hidden via JS class when 3D is active */
-  .hero-fallback-image {
-    display: block;
+  .hero-fallback-image,
+  body.webgl-active .hero-fallback-image {
+    display: block !important;
     position: relative;
     z-index: 2;
     width: min(300px, 72vw);
