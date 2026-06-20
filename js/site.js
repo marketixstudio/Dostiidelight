@@ -469,7 +469,7 @@ function initDistributorForm() {
     if (status) { status.textContent = ''; status.className = 'dist-status'; }
 
     try {
-      const res = await fetch('contact.php', {
+      const res = await fetch('distributor.php', {
         method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' }
       });
       const data = await res.json().catch(() => ({}));
