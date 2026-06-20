@@ -44,7 +44,7 @@ if (filter_var($cleanContact, FILTER_VALIDATE_EMAIL)) {
 }
 
 $sent = mail(
-    'contact@dostiidelight.com',
+    'dostiidelight@gmail.com',
     $subject,
     $body,
     implode("\r\n", $headers)
