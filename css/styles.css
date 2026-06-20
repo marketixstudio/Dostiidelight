@@ -174,16 +174,17 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
 @media (max-width: 992px) {
   .hero {
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
-    padding-block: 7.5rem 4rem;
+    padding-block: 0;
     height: auto;
     min-height: 100svh;
   }
   .hero-content {
     max-width: 100%;
-    padding: 0;
-    margin-bottom: 2rem;
+    padding-top: 5.5rem;
+    padding-bottom: 1rem;
+    margin-bottom: 0;
   }
   .hero .lead { margin: 1.4rem auto 2.2rem; }
   .hero-actions { justify-content: center; }
@@ -449,9 +450,10 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* 3D canvas active on mobile — fades out via JS as hero scrolls away */
+  /* 3D canvas: only show in lower portion of hero — keeps text area clean */
   #hero-canvas {
     pointer-events: none;
+    clip-path: inset(47% 0 0 0);
   }
 
   /* Hero fallback shows when WebGL fails; hidden via JS class when 3D is active */
