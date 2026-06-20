@@ -483,9 +483,8 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); }
     text-align: center;
   }
 
-  /* Canvas is position:absolute, sized by JS to match the hero's actual height.
-     It scrolls with the hero so the model is always within the hero box. */
-  #hero-canvas { position: absolute; clip-path: inset(50% 0 0 0); }
+  /* Hide 3D canvas entirely on mobile */
+  #hero-canvas { display: none; }
 
   /* Hero fallback shows when WebGL fails; hidden via JS class when 3D is active */
   .hero-fallback-image {
