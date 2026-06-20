@@ -615,6 +615,7 @@ body.webgl-active .hero-fallback-image {
 
 /* ---------- badges left-aligned ---------- */
 .badges--left { justify-content: flex-start; }
+@media (max-width: 992px) { .badges--left { justify-content: center; } }
 
 /* ---------- eyebrow color variants ---------- */
 .eyebrow--saffron { color: var(--saffron); }
