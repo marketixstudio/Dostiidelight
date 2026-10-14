@@ -33,9 +33,11 @@ WEBSITE/
 - **3D model:** drop `assets/models/product.glb`. Until then a stylized placeholder packet shows.
 
 ## Contact form
-The enquiry form posts to `contact.php`, which uses Hostinger's PHP mail service to
-deliver messages to `contact@dostiidelight.com`. The form includes inline success
-and error feedback plus a honeypot field for basic spam protection.
+Hosted on Vercel. Both forms still post to `contact.php` and `distributor.php`, which
+`vercel.json` rewrites to the functions in `api/` (Hostinger's PHP mail is gone). They
+send through Resend to `dostiidelight@gmail.com` and need these environment variables in
+Vercel: `RESEND_API_KEY`, `FORM_FROM` (a sender on a domain verified in Resend) and,
+optionally, `FORM_TO`. The old PHP files stay in the repo but are not deployed.
 
 ## Deploy to Hostinger
 1. In hPanel → **File Manager**, open `public_html`.

@@ -1,0 +1,6 @@
+{
+  "name": "dostiidelight-website",
+  "private": true,
+  "type": "module",
+  "description": "Static Dostii Delight site with two Vercel functions for the enquiry forms. No build step."
+}
