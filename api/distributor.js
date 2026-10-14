@@ -1,4 +1,5 @@
 // Home page distributor enquiry form. Same fields, limits and replies as the old distributor.php.
+import { enquiryEmail } from "../lib/email.js";
 import { field, isEmail, json, oneLine, readForm, sendMail } from "../lib/send.js";
 
 export async function POST(request) {
@@ -14,8 +15,19 @@ export async function POST(request) {
 
   const cleanName = oneLine(name);
   const cleanContact = oneLine(contact);
+  const subject = `Distributor Enquiry from ${cleanName}`;
   const sent = await sendMail({
-    subject: `Distributor Enquiry from ${cleanName}`,
+    subject,
+    html: enquiryEmail({
+      badge: "Distributor enquiry",
+      title: `${cleanName} wants to become a distributor`,
+      subject,
+      name: cleanName,
+      contact: cleanContact,
+      message: message.replace(/^\[DISTRIBUTOR ENQUIRY\]\s*/i, ""),
+      messageLabel: "Details",
+      source: "Home page, distributor form",
+    }),
     text: `Name: ${cleanName}\nPhone: ${cleanContact}\n\n${message}\n`,
     replyTo: isEmail(cleanContact) ? cleanContact : undefined,
   });

@@ -1,4 +1,5 @@
 // Contact page enquiry form. Same fields, limits and replies as the old contact.php.
+import { enquiryEmail } from "../lib/email.js";
 import { field, isEmail, json, oneLine, readForm, sendMail } from "../lib/send.js";
 
 export async function POST(request) {
@@ -14,8 +15,18 @@ export async function POST(request) {
 
   const cleanName = oneLine(name);
   const cleanContact = oneLine(contact);
+  const subject = `Website enquiry from ${cleanName}`;
   const sent = await sendMail({
-    subject: `Website enquiry from ${cleanName}`,
+    subject,
+    html: enquiryEmail({
+      badge: "Website enquiry",
+      title: `New enquiry from ${cleanName}`,
+      subject,
+      name: cleanName,
+      contact: cleanContact,
+      message,
+      source: "Contact page",
+    }),
     text: `Name: ${cleanName}\nContact: ${cleanContact}\n\nMessage:\n${message}\n`,
     replyTo: isEmail(cleanContact) ? cleanContact : undefined,
   });
