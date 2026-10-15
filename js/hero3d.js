@@ -1,6 +1,6 @@
 /* =========================================================
    DOSTII DELIGHT — Three.js 3D hero
-   - Loads /assets/models/product.glb if a real 3D model exists.
+   - Loads a GLB model if MODEL_URL is set (none ships yet).
    - Otherwise builds a 3D "tilt card": the real product photo
      mounted on a card with thickness, lit and rotated in 3D
      space. Keeps packaging text perfectly sharp.
@@ -53,17 +53,25 @@ function initHero(canvas) {
   scene.add(group);
   let isFlatCard = false; // flat cards get a tilt animation instead of a full spin
 
-  const loader = new GLTFLoader();
-  loader.load(
-    'assets/models/product.glb',
-    (gltf) => {
-      const model = gltf.scene;
-      fitToGroup(model, group, 2.6);
-      kickOffAnimations();
-    },
-    undefined,
-    () => { buildImageCard(group); kickOffAnimations(); }  // onError -> real product photo card
-  );
+  // No 3D model ships yet, so skip the request (it would 404 on every load).
+  // Set to 'assets/models/product.glb' once a real model is added.
+  const MODEL_URL = '';
+  const useImageCard = () => { buildImageCard(group); kickOffAnimations(); }; // real product photo card
+  if (MODEL_URL) {
+    new GLTFLoader().load(
+      MODEL_URL,
+      (gltf) => {
+        const model = gltf.scene;
+        fitToGroup(model, group, 2.6);
+        kickOffAnimations();
+      },
+      undefined,
+      useImageCard  // onError -> fallback
+    );
+  } else {
+    // deferred (like the loader callback) so later declarations in initHero are initialised
+    Promise.resolve().then(useImageCard);
+  }
 
   // center + scale any loaded model to a target size, then add to group
   function fitToGroup(model, group, targetSize) {
